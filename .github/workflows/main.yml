@@ -4,11 +4,16 @@ name: Playwright Tests
 on:
   workflow_dispatch:    # manual trigger
   schedule:
-    - cron: "0 6 * * *" # every day at 6am UTC (adjust as needed)
+    - cron: "0 6 * * *" # daily at 6am UTC
   pull_request:
     branches: [ main ]
   push:
     branches: [ main ]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
   test:
@@ -33,9 +38,25 @@ jobs:
       - name: Run Playwright tests
         run: npm run test:run-and-save
 
-      - name: Upload HTML Report
-        if: always()
-        uses: actions/upload-artifact@v4
+      # Save last run's report into a predictable folder
+      - name: Copy latest report
+        run: |
+          LAST_RUN=$(ls -td test-runs/* | head -1)
+          mkdir -p gh-pages-report
+          cp -r "$LAST_RUN/html-report"/* gh-pages-report/
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          name: playwright-report
-          path: test-runs/**/html-report
+          path: gh-pages-report
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
