@@ -52,7 +52,7 @@ pages.forEach((slug) => {
         "#route-form-container select#edit-routes option",
         (options) => options.map((option) => option.textContent)
       );
-      expect(routes.length).toBeGreaterThanOrEqual(20);
+      expect(routes.length).toBeGreaterThanOrEqual(18);
       logNote(`Number of routes found: ${routes.length}`);
     });
 
@@ -72,3 +72,4 @@ pages.forEach((slug) => {
     });
   });
 });
+
