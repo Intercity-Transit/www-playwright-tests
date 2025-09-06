@@ -1,0 +1,21 @@
+{
+  "name": "intercity-playwright-tests",
+  "version": "1.0.0",
+  "description": "",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug",
+    "show-report": "playwright show-report test-results",
+    "test:run-and-save": "RUN_ID=$(date +\"%Y-%m-%d_%H-%M-%S\") && PLAYWRIGHT_HTML_REPORT=./test-runs/$RUN_ID/html-report PLAYWRIGHT_JSON_OUTPUT_NAME=./test-runs/$RUN_ID/results.json playwright test --reporter=html,json --output=./test-runs/$RUN_ID/artifacts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.55.0"
+  }
+}
