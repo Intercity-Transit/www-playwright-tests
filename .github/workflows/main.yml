@@ -2,7 +2,12 @@
 name: Playwright Tests
 
 on:
-  workflow_dispatch:    # manual trigger
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: "Base URL for tests"
+        default: "https://www.intercitytransit.com"
+        required: true
   schedule:
     - cron: "0 6 * * *" # daily at 6am UTC
   pull_request:
@@ -37,8 +42,10 @@ jobs:
 
       - name: Run Playwright tests
         run: npm run test:run-and-save
+        env:
+          BASE_URL: ${{ github.event.inputs.base_url || 'https://www.intercitytransit.com' }}
 
-      # Save last run's report into a predictable folder
+      # Copy last run's report into a predictable folder
       - name: Copy latest report
         run: |
           LAST_RUN=$(ls -td test-runs/* | head -1)
