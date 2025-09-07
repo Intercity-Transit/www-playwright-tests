@@ -1,8 +1,6 @@
 import { test, expect, Page, Locator } from "../../global-setup";
 import * as common from "../assertions/common";
 
-const pages = ["/about-us/news-and-alerts"];
-
 test.describe("News and Alerts page tests", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/about-us/news-and-alerts");

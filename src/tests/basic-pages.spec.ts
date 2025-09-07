@@ -28,7 +28,7 @@ pages.forEach((slug) => {
     });
 
     // Test header search form.
-    test("the header contains a search form", async ({ page }) => {
+    test("the header contains a search form @search", async ({ page }) => {
       await header.assertHeaderHasSearchForm(page);
     });
 

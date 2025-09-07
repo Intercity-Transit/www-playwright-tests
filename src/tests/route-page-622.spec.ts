@@ -15,7 +15,7 @@ async function getTable(page: Page): Promise<Locator> {
 }
 
 pages.forEach((slug) => {
-  test.describe(`Tests for ${slug} and route times (@routes)`, () => {
+  test.describe(`Tests for ${slug} and route times @routes`, () => {
     // Test to match in tests.
     let string = "";
 
@@ -26,7 +26,7 @@ pages.forEach((slug) => {
     });
 
     // Test title.
-    test("Route has times (@routes)", async ({ page }) => {
+    test("Route has times @routes", async ({ page }) => {
       const timesTable = await getTable(page);
       await expect.soft(timesTable).toContainText(/(a\.m\.?|am)/i);
       await expect.soft(timesTable).toContainText(/(p\.m\.?|pm)/i);

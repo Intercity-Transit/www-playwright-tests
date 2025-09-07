@@ -4,7 +4,7 @@ import * as common from "../assertions/common";
 import * as header from "../assertions/header";
 import * as footer from "../assertions/footer";
 
-test.describe(`Tests for search page`, () => {
+test.describe(`Tests for search page @search`, () => {
   // Navigate to the specific page before each test.
   test.beforeEach(async ({ page }) => {
     await page.goto("/");
@@ -16,8 +16,8 @@ test.describe(`Tests for search page`, () => {
     await header.assertHeaderHasSearchForm(page);
   });
 
-  // Test header search form navigation.
-  test("we can search and get redirected to search results page", async ({
+  // Test header form search.
+  test("searching redirects to a results page", async ({
     page,
   }) => {
     const searchInput = page.locator('.region-header-top input[type="search"]');
@@ -29,8 +29,8 @@ test.describe(`Tests for search page`, () => {
     await expect(page).toHaveURL(/search\/wheel/);
   });
 
-  // Test search results show up and are clickable.
-  test("the search results are displayed and clickable", async ({ page }) => {
+  // Test results show and are clickable.
+  test("search has results clickable", async ({ page }) => {
     // Navigate directly to search results page
     await page.goto("/search/wheel");
     await common.closeSubscribePopup(page);
