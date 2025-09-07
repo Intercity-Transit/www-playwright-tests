@@ -10,6 +10,7 @@ export default defineConfig({
     baseURL: process.env.BASE_URL || "https://www.intercitytransit.com",
     headless: true,
     trace: "on-first-retry",
+    screenshot: "only-on-failure",
   },
   projects: [
     {
@@ -17,19 +18,4 @@ export default defineConfig({
       use: { ...devices["Desktop Chrome"] },
     },
   ],
-  // 👇 Add this block
-  hooks: {
-    async beforeEach({ page }, testInfo) {
-      // Override page.goto globally
-      const originalGoto = page.goto.bind(page);
-      page.goto = async (url: string, options?: any) => {
-        const response = await originalGoto(url, options);
-        const finalUrl = page.url();
-        const message = `→ page.goto(${url}) → final: ${finalUrl}`;
-        console.log(message);
-        testInfo.annotations.push({ type: "note", description: message });
-        return response;
-      };
-    },
-  },
 });

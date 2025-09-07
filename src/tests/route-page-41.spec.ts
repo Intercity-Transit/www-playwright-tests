@@ -1,4 +1,4 @@
-import { test, expect, Page, Locator } from "@playwright/test";
+import { test, expect, Page, Locator } from "../../global-setup";
 import * as common from "../assertions/common";
 import * as footer from "../assertions/footer";
 

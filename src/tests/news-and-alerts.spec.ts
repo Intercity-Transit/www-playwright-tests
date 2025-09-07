@@ -1,29 +1,24 @@
-import { test, expect } from "@playwright/test";
-import { logNote } from '../utils/logNote';
+import { test, expect, Page, Locator } from "../../global-setup";
+import * as common from "../assertions/common";
 
 const pages = ["/about-us/news-and-alerts"];
 
-test.describe("News and Alerts Page Specific Tests", () => {
+test.describe("News and Alerts page tests", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/about-us/news-and-alerts");
+    await common.closeSubscribePopup(page);
   });
 
-  test("has correct h1 and contains articles", async ({ page }) => {
-
-    // Assert that h1 contains expected text
+  // Assert that h1 contains expected text.
+  test("the h1 contains News and Alerts", async ({ page }) => {
     const h1 = page.locator("h1");
-    const text = await h1.textContent();
-
     await expect(h1).toContainText("News and Alerts");
-    logNote(`H1 content found: "${text}"`);
+  });
 
-    // Check news items count
-    const titles = page.locator(
-      "#block-views-block-news-block-2 div.views-field > h2"
-    );
-
+  // Check news items count.
+  test("the page lists 20 articles", async ({ page }) => {
+    const titles = page.locator("#block-views-block-news-block-2 h2");
     const count = await titles.count();
     await expect.soft(titles).toHaveCount(20);
-    logNote(`Number of news titles found: ${count}`);
   });
 });

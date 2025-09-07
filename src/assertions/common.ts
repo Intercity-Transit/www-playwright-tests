@@ -4,11 +4,6 @@ export async function assertPageHasTitle(page: Page) {
   await expect(page).toHaveTitle(/Intercity Transit/i);
 }
 
-export async function assertHeaderHasSearchForm(page: Page) {
-  const searchInput = page.locator('form input[type="search"]');
-  await expect(searchInput).toBeVisible();
-}
-
 export async function closeSubscribePopup(page: Page) {
   // Press escape just in case
   await page.keyboard.press("Escape");

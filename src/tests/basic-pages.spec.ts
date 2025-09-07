@@ -1,5 +1,7 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "../../global-setup";
+import { logNote } from "../utils/logNote";
 import * as common from "../assertions/common";
+import * as header from "../assertions/header";
 import * as footer from "../assertions/footer";
 
 const pages = [
@@ -17,16 +19,17 @@ pages.forEach((slug) => {
     // Navigate to the specific page before each test.
     test.beforeEach(async ({ page }) => {
       await page.goto(slug);
+      await common.closeSubscribePopup(page);
     });
 
     // Test title.
-    test(`loads ${pageDisplayName} successfully`, async ({ page }) => {
+    test(`page has a title tag`, async ({ page }) => {
       await common.assertPageHasTitle(page);
     });
 
     // Test header search form.
     test("the header contains a search form", async ({ page }) => {
-      await common.assertHeaderHasSearchForm(page);
+      await header.assertHeaderHasSearchForm(page);
     });
 
     // Test phone shows.
@@ -35,7 +38,7 @@ pages.forEach((slug) => {
     });
 
     // Test contact form link.
-    test(`${pageDisplayName} footer contains contact form link`, async ({
+    test(`footer contains contact form link`, async ({
       page,
     }) => {
       await footer.assertFooterHasContactFormLink(page);

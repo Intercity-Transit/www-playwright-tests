@@ -42,15 +42,15 @@ npx playwright test src/tests/homepage-bus-routes --reporter=list
 
 # Run tests with a specific tag
 npx playwright test --grep @routes
+
+# Run and save a report
+npm run test:run-and-save
 ```
 
 ### Intercity Transit WWW Site
 ```bash
-# Run tests against the live site
-BASE_URL=https://test-intercity-transit.pantheonsite.io/ npx playwright test
-
-# Run specific test against live site
-BASE_URL=https://test-intercity-transit.pantheonsite.io/ npx playwright test src/tests/homepage-bus-routes
+# Run tests against a dev site
+BASE_URL=https://dev-intercity-transit.pantheonsite.io/ npx playwright test
 ```
 
 ### View Results
