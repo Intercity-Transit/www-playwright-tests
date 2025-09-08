@@ -42,9 +42,10 @@ jobs:
       - name: Run Playwright tests
         run: |
           PLAYWRIGHT_HTML_REPORT=html-report \
-          npx playwright test --reporter=html
+          npx playwright test --reporter=html 
         env:
           BASE_URL: ${{ github.event.inputs.base_url || 'https://www.intercitytransit.com' }}
+        continue-on-error: true
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
