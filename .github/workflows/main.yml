@@ -1,4 +1,3 @@
-# .github/workflows/playwright.yml
 name: Playwright Tests
 
 on:
@@ -9,7 +8,7 @@ on:
         default: "https://www.intercitytransit.com"
         required: true
   schedule:
-    - cron: "0 6 * * *" # daily at 6am UTC
+    - cron: "0 */4 * * *" # every 4 hours
   pull_request:
     branches: [ main ]
   push:
@@ -32,7 +31,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18
-          cache: "npm"
+          cache: npm
 
       - name: Install dependencies
         run: npm ci
@@ -41,21 +40,16 @@ jobs:
         run: npx playwright install --with-deps
 
       - name: Run Playwright tests
-        run: npm run test:run-and-save
+        run: |
+          PLAYWRIGHT_HTML_REPORT=html-report \
+          npx playwright test --reporter=html
         env:
           BASE_URL: ${{ github.event.inputs.base_url || 'https://www.intercitytransit.com' }}
-
-      # Copy last run's report into a predictable folder
-      - name: Copy latest report
-        run: |
-          LAST_RUN=$(ls -td test-runs/* | head -1)
-          mkdir -p gh-pages-report
-          cp -r "$LAST_RUN/html-report"/* gh-pages-report/
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: gh-pages-report
+          path: html-report
 
   deploy:
     environment:
