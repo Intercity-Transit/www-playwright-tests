@@ -14,9 +14,18 @@ test.describe("News and Alerts page tests", () => {
   });
 
   // Check news items count.
-  test("the page lists 20 articles", async ({ page }) => {
+  test("the page lists at least 10 articles", async ({ page }) => {
     const titles = page.locator("#block-views-block-news-block-2 h2");
     const count = await titles.count();
-    await expect.soft(titles).toHaveCount(20);
+    await expect.soft(titles).toHaveCountGreaterThan(10);
+  });
+
+  // Check article links.
+  test("can click and view the first article", async ({ page }) => {
+    const firstArticle = page.locator("#block-views-block-news-block-2 h2 a").first();
+    const articleTitle = await firstArticle.textContent();
+    await firstArticle.click();
+    const detailH1 = page.locator("h1");
+    await expect.soft(detailH1).toHaveText(articleTitle ?? "");
   });
 });

@@ -22,11 +22,11 @@ test.describe.serial(`Test landing page routes list @routes`, () => {
     logNote(`Found ${routeLinks.length} route links to test`);
   });
 
-  test("test each route link", async ({ page }) => {
+  test("check each route link", async ({ page }) => {
     const failures: string[] = [];
 
     for (const routeLink of routeLinks) {
-      await test.step(`Check route: ${routeLink.text} (${routeLink.href})`, async () => {
+      await test.step(`click on route ${routeLink.text} (${routeLink.href})`, async () => {
         try {
           await page.goto("/plan-your-trip/routes");
           await common.closeSubscribePopup(page);
