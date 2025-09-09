@@ -14,9 +14,8 @@ const pages = [
 ];
 
 pages.forEach((slug) => {
-  const pageDisplayName = slug === "/" ? "homepage" : slug;
 
-  test.describe(`Tests for ${pageDisplayName}`, () => {
+  test.describe(`Tests for [${slug}]`, () => {
     test(`page has no JavaScript errors`, async ({ page }) => {
       await page.goto(slug);
       await common.watchForPageErrors(page, slug);

@@ -12,18 +12,18 @@ test.describe("Schedule a Ride page tests", () => {
     await expect.soft(h1, "Page should have correct heading").toContainText("Scheduling a Ride");
 
     // Test main phone number is visible
-    const phoneNumber = page.locator("text=360-754-9393");
+    const phoneNumber = page.getByText("360-754-9393").first();
     await expect.soft(phoneNumber, "Page should display the main phone number 360-754-9393").toBeVisible();
 
     // Test how to ride section
-    const howToRideSection = page.locator("text=How to Ride Dial-A-Lift");
-    await expect.soft(howToRideSection, "Page should contain 'How to Ride Dial-A-Lift' section").toBeVisible();
+    const howToRideSection = page.getByText("text=If you wish to change your scheduled ride").first();
+    await expect.soft(howToRideSection, "Page should contain 'If you wish to change your scheduled ride' section").toBeVisible();
 
     // Test TTY information
-    const ttyMessage = page.locator("text=for people with hearing or speaking difficulties");
+    const ttyMessage = page.getByText("for people with hearing or speaking difficulties").first();
     await expect.soft(ttyMessage, "Page should display TTY accessibility message").toBeVisible();
 
-    const ttyNumber = page.locator("text=360-357-7133");
+    const ttyNumber = page.getByText("360-357-7133").first();
     await expect.soft(ttyNumber, "Page should display the TTY phone number 360-357-7133").toBeVisible();
   });
 });

@@ -13,7 +13,8 @@ test.describe("News and Alerts page tests", () => {
 
     // Test article count
     const titles = page.locator("#block-views-block-news-block-2 h2");
-    await expect.soft(titles, "Page should display at least 10 news articles").toHaveCountGreaterThan(10);
+    const count = await titles.count();
+    expect.soft(count, "Page should display at least 10 news articles").toBeGreaterThan(10);
 
     // Test article navigation
     const firstArticle = page.locator("#block-views-block-news-block-2 h2 a").first();
