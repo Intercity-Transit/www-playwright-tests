@@ -1,0 +1,11 @@
+name: Scheduled Playwright Tests
+
+on:
+  schedule:
+    - cron: "0 */4 * * *" # every 4 hours
+
+jobs:
+  run-main-workflow:
+    uses: ./.github/workflows/main.yml
+    with:
+      base_url: "https://www.intercitytransit.com"
