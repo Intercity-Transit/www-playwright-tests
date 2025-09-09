@@ -2,6 +2,7 @@
  * Bus route numbers used throughout the Intercity Transit system
  */
 export const BUS_ROUTES = [
+  "1",
   "12",
   "13",
   "14",
@@ -18,7 +19,6 @@ export const BUS_ROUTES = [
   "67",
   "68",
   "94",
-  "One",
   "621",
   "622"
 ] as const;
