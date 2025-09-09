@@ -2,30 +2,25 @@ import { test, expect, Page, Locator } from "../../global-setup";
 import * as common from "../assertions/common";
 
 test.describe("News and Alerts page tests", () => {
-  test.beforeEach(async ({ page }) => {
+  test("validate news and alerts page functionality", async ({ page }) => {
+    // Navigate to the page
     await page.goto("/about-us/news-and-alerts");
     await common.closeSubscribePopup(page);
-  });
 
-  // Assert that h1 contains expected text.
-  test("the h1 contains News and Alerts", async ({ page }) => {
+    // Test page heading
     const h1 = page.locator("h1");
-    await expect(h1).toContainText("News and Alerts");
-  });
+    await expect.soft(h1, "Page should have correct heading").toContainText("News and Alerts");
 
-  // Check news items count.
-  test("the page lists at least 10 articles", async ({ page }) => {
+    // Test article count
     const titles = page.locator("#block-views-block-news-block-2 h2");
-    const count = await titles.count();
-    await expect.soft(titles).toHaveCountGreaterThan(10);
-  });
+    await expect.soft(titles, "Page should display at least 10 news articles").toHaveCountGreaterThan(10);
 
-  // Check article links.
-  test("can click and view the first article", async ({ page }) => {
+    // Test article navigation
     const firstArticle = page.locator("#block-views-block-news-block-2 h2 a").first();
     const articleTitle = await firstArticle.textContent();
     await firstArticle.click();
+
     const detailH1 = page.locator("h1");
-    await expect.soft(detailH1).toHaveText(articleTitle ?? "");
+    await expect.soft(detailH1, "Article detail page should display the correct article title").toHaveText(articleTitle ?? "");
   });
 });

@@ -2,8 +2,6 @@ import { test, expect, Page, Locator } from "../../global-setup";
 import * as common from "../assertions/common";
 import * as footer from "../assertions/footer";
 
-const pages = ["/plan-your-trip/routes/41"];
-
 // Helper function to locate the times table.
 async function getTable(page: Page): Promise<Locator> {
   await page.waitForSelector("#route-table table tr", {
@@ -14,47 +12,26 @@ async function getTable(page: Page): Promise<Locator> {
   return page.locator("#route-table table").last();
 }
 
-pages.forEach((slug) => {
-  test.describe(`Tests for ${slug} and route times @routes`, () => {
-    // Test to match in tests.
-    let string = "";
+test.describe("Route 41 page tests @routes", () => {
+  // Navigate to the specific page before each test.
+  test.beforeEach(async ({ page }) => {
+    await page.goto("/plan-your-trip/routes/41");
+    await common.closeSubscribePopup(page);
+  });
 
-    // Navigate to the specific page before each test.
-    test.beforeEach(async ({ page }) => {
-      await page.goto(slug);
-      await common.closeSubscribePopup(page);
-    });
+  test("Route 41 schedule validation", async ({ page }) => {
+    const timesTable = await getTable(page);
 
-    // Test title.
-    test("Route has times @routes", async ({ page }) => {
-      const timesTable = await getTable(page);
-      await expect.soft(timesTable).toContainText(/(a\.m\.?|am)/i);
-      await expect.soft(timesTable).toContainText(/(p\.m\.?|pm)/i);
-    });
+    // Verify time formats are present
+    await expect.soft(timesTable, "Schedule should contain AM times").toContainText(/(a\.m\.?|am)/i);
+    await expect.soft(timesTable, "Schedule should contain PM times").toContainText(/(p\.m\.?|pm)/i);
 
-    // Schedule tests.
-    string = "Olympia Transit Center";
-    test(`Route includes ${string}`, async ({ page }) => {
-      const timesTable = await getTable(page);
-      await expect.soft(timesTable).toContainText(string);
-    });
+    // Verify key stops are included
+    await expect.soft(timesTable, "Schedule should include Olympia Transit Center stop").toContainText("Olympia Transit Center");
+    await expect.soft(timesTable, "Schedule should include Evergreen Dorms stop").toContainText("Evergreen Dorms");
 
-    string = "Evergreen Dorms";
-    test(`Route includes ${string}`, async ({ page }) => {
-      const timesTable = await getTable(page);
-      await expect.soft(timesTable).toContainText(string);
-    });
-
-    string = "6:00";
-    test(`Route includes ${string}`, async ({ page }) => {
-      const timesTable = await getTable(page);
-      await expect.soft(timesTable).toContainText(string);
-    });
-
-    string = "9:55";
-    test(`Route includes ${string}`, async ({ page }) => {
-      const timesTable = await getTable(page);
-      await expect.soft(timesTable).toContainText(string);
-    });
+    // Verify specific times are present
+    await expect.soft(timesTable, "Schedule should include 6:00 time").toContainText("6:00");
+    await expect.soft(timesTable, "Schedule should include 9:55 time").toContainText("9:55");
   });
 });

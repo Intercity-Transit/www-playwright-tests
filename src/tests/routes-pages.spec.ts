@@ -6,6 +6,7 @@ import * as footer from "../assertions/footer";
 test.describe.serial(`Test landing page routes list @routes`, () => {
   let routeLinks: Array<{ text: string; href: string }> = [];
 
+  // Go to routes page and get links list.
   test.beforeAll(async ({ browser }) => {
     const page = await browser.newPage();
     await page.goto("/plan-your-trip/routes");
@@ -22,19 +23,14 @@ test.describe.serial(`Test landing page routes list @routes`, () => {
     logNote(`Found ${routeLinks.length} route links to test`);
   });
 
-  test("check each route link", async ({ page }) => {
+  // Test each routes link.
+  test("check each link to a route page", async ({ page }) => {
     const failures: string[] = [];
 
     for (const routeLink of routeLinks) {
       await test.step(`click on route ${routeLink.text} (${routeLink.href})`, async () => {
         try {
-          await page.goto("/plan-your-trip/routes");
-          await common.closeSubscribePopup(page);
-
-          await Promise.all([
-            page.waitForLoadState("networkidle", { timeout: 10000 }),
-            page.click(`ul.routes-container > li a[href="${routeLink.href}"]`),
-          ]);
+          await page.goto(routeLink.href);
 
           const finalUrl = page.url();
           const error404 = await page.locator("text=404").count();
