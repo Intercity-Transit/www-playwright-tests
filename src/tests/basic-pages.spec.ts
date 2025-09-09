@@ -12,36 +12,33 @@ const pages = [
   "/about-us/news-and-alerts",
 ];
 
-pages.forEach((slug) => {
-  const pageDisplayName = slug === "/" ? "homepage" : slug;
+test.describe("Basic pages validation", () => {
+  pages.forEach((slug) => {
+    const pageDisplayName = slug === "/" ? "homepage" : slug;
 
-  test.describe(`Tests for ${pageDisplayName}`, () => {
-    // Navigate to the specific page before each test.
-    test.beforeEach(async ({ page }) => {
+    test(`validate [${pageDisplayName}] page elements`, async ({ page }) => {
+      await logNote(`Testing page: ${pageDisplayName}`);
+
+      // Navigate to the page
       await page.goto(slug);
       await common.closeSubscribePopup(page);
-    });
 
-    // Test title.
-    test(`page has a title tag`, async ({ page }) => {
-      await common.assertPageHasTitle(page);
-    });
+      // Test page elements
+      await expect.soft(async () => {
+        await common.assertPageHasTitle(page);
+      }, `${pageDisplayName} should have a valid title tag`).toPass();
 
-    // Test header search form.
-    test("the header contains a search form @search", async ({ page }) => {
-      await header.assertHeaderHasSearchForm(page);
-    });
+      await expect.soft(async () => {
+        await header.assertHeaderHasSearchForm(page);
+      }, `${pageDisplayName} header should contain a search form`).toPass();
 
-    // Test phone shows.
-    test("footer contains customer service number", async ({ page }) => {
-      await footer.assertFooterHasCustomerService(page);
-    });
+      await expect.soft(async () => {
+        await footer.assertFooterHasCustomerService(page);
+      }, `${pageDisplayName} footer should contain customer service number`).toPass();
 
-    // Test contact form link.
-    test(`footer contains contact form link`, async ({
-      page,
-    }) => {
-      await footer.assertFooterHasContactFormLink(page);
+      await expect.soft(async () => {
+        await footer.assertFooterHasContactFormLink(page);
+      }, `${pageDisplayName} footer should contain contact form link`).toPass();
     });
   });
 });
