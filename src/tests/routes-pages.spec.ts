@@ -1,55 +1,54 @@
 import { test, expect } from '../../global-setup';
 import { logNote } from '../utils/logNote';
+import { BUS_ROUTES } from '../utils/constants';
 import * as common from '../assertions/common';
-import * as footer from '../assertions/footer';
 
-test.describe.serial(`Test landing page routes list @routes`, () => {
-  let routeLinks: Array<{ text: string; href: string }> = [];
+test.describe(`Test each route page @routes`, () => {
+  BUS_ROUTES.forEach((routeId) => {
+    test(`Route ${routeId} page loads correctly`, async ({ page }) => {
+      const routeUrl = `/plan-your-trip/routes/${routeId}`;
 
-  // Go to routes page and get links list.
-  test.beforeAll(async ({ browser }) => {
-    const page = await browser.newPage();
-    await page.goto('/plan-your-trip/routes');
-    await common.closeSubscribePopup(page);
+      await page.goto(routeUrl);
+      await common.closeSubscribePopup(page);
 
-    routeLinks = await page.$$eval('ul.routes-container > li a', (links) =>
-      links.map((link) => ({
-        text: link.textContent?.trim() || 'unnamed',
-        href: link.getAttribute('href') || '',
-      })),
-    );
+      const finalUrl = page.url();
+      const error404 = await page.locator('text=404').count();
+      const errorMsg = await page.locator('text=error').count();
+      const pageTitle = (await page.title()).trim();
 
-    await page.close();
-    logNote(`Found ${routeLinks.length} route links to test`);
-  });
+      // Check if redirect is to a different route (bad redirect)
+      const finalUrlObj = new URL(finalUrl);
+      const baseUrl = finalUrlObj.origin; // Get the base URL from the final URL
+      const originalUrlObj = new URL(routeUrl, baseUrl); // Construct the original URL properly
+      const isBadRedirect = finalUrlObj.pathname !== originalUrlObj.pathname;
 
-  // Test each routes link.
-  test('we can open each route link and see the route page', async ({ page }) => {
-    const failures: string[] = [];
+      // Verify page loaded successfully
+      expect.soft(error404, `Route ${routeId} shows 404 error`).toBe(0);
+      expect.soft(errorMsg, `Route ${routeId} shows error message`).toBe(0);
+      expect.soft(pageTitle, `Route ${routeId} has no page title`).toBeTruthy();
+      expect.soft(finalUrl.includes('chrome-error://'), `Route ${routeId} has chrome error`).toBeFalsy();
+      expect.soft(isBadRedirect, `Route ${routeId} was redirected from ${routeUrl} to ${finalUrl}`).toBeFalsy();
 
-    for (const routeLink of routeLinks) {
-      await test.step(`click on route ${routeLink.text} (${routeLink.href})`, async () => {
-        try {
-          await page.goto(routeLink.href);
+      // Check for required page elements
+      await expect.soft(
+        page.locator('nav[aria-label="Breadcrumb"]'),
+        `Route ${routeId} page should have breadcrumb navigation`
+      ).toBeVisible();
 
-          const finalUrl = page.url();
-          const error404 = await page.locator('text=404').count();
-          const errorMsg = await page.locator('text=error').count();
-          const pageTitle = (await page.title()).trim();
-          const wasRedirect = finalUrl !== routeLink.href;
+      await expect.soft(
+        page.locator('a#download-link[href*="/sites/default/files/"]'),
+        `Route ${routeId} page should have download schedule link`
+      ).toBeVisible();
 
-          if (error404 > 0 || errorMsg > 0 || !pageTitle || finalUrl.includes('chrome-error://') || wasRedirect) {
-            failures.push(`Route ${routeLink.text} (${routeLink.href}) failed. Final URL: ${finalUrl}`);
-          }
-        } catch (err) {
-          failures.push(`Navigation error for ${routeLink.text} (${routeLink.href}): ${err}`);
-        }
-      });
-    }
+      await expect.soft(
+        page.locator('#route-table table').first(),
+        `Route ${routeId} page should have route times table`
+      ).toBeVisible();
 
-    // Fail the test at the end if any routes had problems
-    if (failures.length > 0) {
-      throw new Error(`Some route links failed:\n${failures.join('\n')}`);
-    }
+      await expect.soft(
+        page.locator(`text="Open Route ${routeId} Map"`),
+        `Route ${routeId} page should have map toggle`
+      ).toBeVisible();
+    });
   });
 });
