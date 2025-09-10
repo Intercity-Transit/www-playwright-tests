@@ -1,5 +1,5 @@
-import { Page, expect } from "@playwright/test";
-import { logNote } from "../utils/logNote";
+import { Page, expect } from '@playwright/test';
+import { logNote } from '../utils/logNote';
 
 export async function assertPageHasTitle(page: Page) {
   await expect(page).toHaveTitle(/Intercity Transit/i);
@@ -7,16 +7,16 @@ export async function assertPageHasTitle(page: Page) {
 
 export async function closeSubscribePopup(page: Page) {
   // Press escape just in case
-  await page.keyboard.press("Escape");
+  await page.keyboard.press('Escape');
 
-  const closeButton = page.locator("#prefix-overlay-header button");
+  const closeButton = page.locator('#prefix-overlay-header button');
 
   try {
     // Wait up to 5s for popup
     if (await closeButton.isVisible({ timeout: 5000 })) {
       await closeButton.click();
       // Wait until modal disappears
-      await closeButton.waitFor({ state: "detached", timeout: 5000 });
+      await closeButton.waitFor({ state: 'detached', timeout: 5000 });
     }
   } catch (e) {
     // No popup appeared — safe to ignore
@@ -29,7 +29,7 @@ export async function closeSubscribePopup(page: Page) {
 export async function watchForPageErrors(page: Page, slug: string) {
   const jsErrors: string[] = [];
 
-  page.on("pageerror", (err) => {
+  page.on('pageerror', (err) => {
     jsErrors.push(err.message);
   });
 
@@ -49,8 +49,8 @@ export async function watchForPageErrors(page: Page, slug: string) {
 export async function watchForConsoleErrors(page: Page, slug: string) {
   const consoleErrors: string[] = [];
 
-  page.on("console", (msg) => {
-    if (msg.type() === "error") {
+  page.on('console', (msg) => {
+    if (msg.type() === 'error') {
       consoleErrors.push(msg.text());
     }
   });
@@ -61,9 +61,7 @@ export async function watchForConsoleErrors(page: Page, slug: string) {
     consoleErrors.forEach((msg) => logNote(`Console error on ${slug}: ${msg}`));
   }
 
-  expect
-    .soft(consoleErrors.length, `Console errors detected on ${slug}`)
-    .toBe(0);
+  expect.soft(consoleErrors.length, `Console errors detected on ${slug}`).toBe(0);
 }
 
 /**
@@ -73,13 +71,13 @@ export async function watchForNetworkErrors(page: Page, slug: string) {
   const badResponses: string[] = [];
   const failedRequests: string[] = [];
 
-  page.on("response", (response) => {
+  page.on('response', (response) => {
     if (response.status() >= 400) {
       badResponses.push(`${response.status()} ${response.url()}`);
     }
   });
 
-  page.on("requestfailed", (request) => {
+  page.on('requestfailed', (request) => {
     failedRequests.push(`Failed request: ${request.url()} - ${request.failure()?.errorText}`);
   });
 
@@ -95,7 +93,5 @@ export async function watchForNetworkErrors(page: Page, slug: string) {
     allErrors.forEach((msg) => logNote(`Network error on ${slug}: ${msg}`));
   }
 
-  expect
-    .soft(allErrors.length, `Network response errors detected on ${slug}`)
-    .toBe(0);
+  expect.soft(allErrors.length, `Network response errors detected on ${slug}`).toBe(0);
 }

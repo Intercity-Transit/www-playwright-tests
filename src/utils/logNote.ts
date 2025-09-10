@@ -9,4 +9,4 @@ export function logNote(message: string) {
 
   // Print to console
   console.log(message);
-}
+}
