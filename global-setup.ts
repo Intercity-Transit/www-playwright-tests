@@ -1,11 +1,14 @@
-import { test as base, expect } from "@playwright/test";
-import { logNote } from "./src/utils/logNote";
+import { test as base, expect } from '@playwright/test';
+import { logNote } from './src/utils/logNote';
 
 // Extend the base test to include global hooks
 export const test = base.extend({});
 
 // Add global beforeEach hook
 test.beforeEach(async ({ page }, testInfo) => {
+  // Add URL annotation at start of test
+  logNote(`Beginning URL → ${page.url()}`);
+
   // Listen to all navigation events
   page.on('framenavigated', (frame) => {
     if (frame === page.mainFrame()) {
@@ -19,9 +22,9 @@ test.afterEach(async ({ page }, testInfo) => {
   // Take a screenshot after each test
   try {
     const screenshot = await page.screenshot({ fullPage: true });
-    await testInfo.attach("final-screenshot", {
+    await testInfo.attach('final-screenshot', {
       body: screenshot,
-      contentType: "image/png",
+      contentType: 'image/png',
     });
     logNote(`Screenshot taken for test: ${testInfo.title}`);
   } catch (error) {
@@ -29,4 +32,4 @@ test.afterEach(async ({ page }, testInfo) => {
   }
 });
 
-export { expect, Page, Locator } from "@playwright/test";
+export { expect, Page, Locator } from '@playwright/test';

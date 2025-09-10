@@ -1,21 +1,18 @@
-import { defineConfig, devices } from "@playwright/test";
+import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
-  testDir: "./src/tests",
-  reporter: [
-    ["list"],
-    ["html", { outputFolder: "test-results", open: "never" }],
-  ],
+  testDir: './src/tests',
+  reporter: [['list'], ['html', { outputFolder: 'test-results', open: 'never' }]],
   use: {
-    baseURL: process.env.BASE_URL || "https://www.intercitytransit.com",
+    baseURL: process.env.BASE_URL || 'https://www.intercitytransit.com',
     headless: true,
-    trace: "on-first-retry",
-    screenshot: "only-on-failure",
+    trace: 'on-first-retry',
+    screenshot: 'only-on-failure',
   },
   projects: [
     {
-      name: "chromium",
-      use: { ...devices["Desktop Chrome"] },
+      name: 'chromium',
+      use: { ...devices['Desktop Chrome'] },
     },
   ],
 });
