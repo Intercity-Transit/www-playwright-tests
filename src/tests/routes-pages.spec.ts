@@ -2,7 +2,6 @@ import { test, expect } from '../../global-setup';
 import { logNote } from '../utils/logNote';
 import { BUS_ROUTES } from '../utils/constants';
 import * as common from '../assertions/common';
-import * as footer from '../assertions/footer';
 
 test.describe(`Test each route page @routes`, () => {
   BUS_ROUTES.forEach((routeId) => {
