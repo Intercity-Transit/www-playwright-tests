@@ -16,7 +16,7 @@ test.describe('Schedule a Ride page tests', () => {
     await expect.soft(phoneNumber, 'Page should display the main phone number 360-754-9393').toBeVisible();
 
     // Test how to ride section
-    const howToRideSection = page.getByText('text=How to Ride Dial-A-Lift').first();
+    const howToRideSection = page.getByText('How to Ride Dial-A-Lift').first();
     await expect
       .soft(howToRideSection, "Page should contain 'How to Ride Dial-A-Lift' section")
       .toBeVisible();
