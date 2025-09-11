@@ -2,6 +2,7 @@ import { test, expect, Page, Locator } from '../../global-setup';
 import * as common from '../assertions/common';
 import * as footer from '../assertions/footer';
 import { logNote } from '../utils/logNote';
+import { testRouteScheduleBehavior } from '../common/routeScheduleBehavior';
 
 // Helper function to locate the times table.
 async function getTable(page: Page): Promise<Locator> {
@@ -30,8 +31,8 @@ test.describe('Tests for route 21 page @routes', () => {
 
     // Click the download button
     const [response] = await Promise.all([
-      page.waitForResponse(response => response.status() === 200),
-      downloadButton.click()
+      page.waitForResponse((response) => response.status() === 200),
+      downloadButton.click(),
     ]);
 
     expect.soft(response.url(), 'Download URL should contain .pdf').toContain('.pdf');
@@ -61,42 +62,7 @@ test.describe('Tests for route 21 page @routes', () => {
       .toContainText('Friendly Grove at 26th Ave');
   });
 
-  test('Test the time-table behavior @routes', async ({ page }) => {
-    /***
-     * We have two times tables on the page. One for each direction of travel.
-     * Let's test the second table (the default one) for "All stops" and "Timepoints".
-     */
-
-    const tables = page.locator('#route-table table');
-    await expect.soft(tables, 'There should be two route times tables').toHaveCount(2);
-    const table = tables.nth(1); // Get the second table
-
-
-    const getVisibleRowCount = async () => {
-      return await table.locator('tbody tr:visible').count();
-    };
-
-    // Expect all rows to start
-    let visibleCount = await getVisibleRowCount();
-    expect.soft(visibleCount, 'There should be 10+ table rows visible by default').toBeGreaterThan(10);
-    logNote(`There are ${visibleCount} visible rows in the route times table`);
-
-    // Click the Timepoints button
-    const timepointsButton = page.locator('label.btn:has-text("Timepoints"):visible');
-    await timepointsButton.click();
-    let visibleCountAfterTimepoints = await getVisibleRowCount();
-    expect
-    .soft(visibleCountAfterTimepoints, 'There should be fewer rows visible after clicking Timepoints')
-    .toBeLessThan(visibleCount);
-
-    logNote(`There are ${visibleCountAfterTimepoints} visible rows in the route times table after clicking Timepoints`);
-
-    // Click the All Stops button
-    const allStopsButton = page.locator('label.btn:has-text("All stops"):visible');
-    await allStopsButton.click();
-    let visibleCountAfterAllStops = await getVisibleRowCount();
-    expect.soft(visibleCountAfterAllStops, 'All rows should be visible after clicking All Stops').toEqual(visibleCount);
-
-    logNote(`There are ${visibleCountAfterAllStops} visible rows in the route times table after clicking All Stops`);
+  test('Test the schedule behavior on a route page @routes', async ({ page }) => {
+    await testRouteScheduleBehavior(page, true);
   });
 });

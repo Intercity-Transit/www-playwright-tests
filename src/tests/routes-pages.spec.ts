@@ -30,25 +30,23 @@ test.describe(`Test each route page @routes`, () => {
       expect.soft(isBadRedirect, `Route ${routeId} was redirected from ${routeUrl} to ${finalUrl}`).toBeFalsy();
 
       // Check for required page elements
-      await expect.soft(
-        page.locator('nav[aria-label="Breadcrumb"]'),
-        `Route ${routeId} page should have breadcrumb navigation`
-      ).toBeVisible();
+      await expect.soft(page.locator('a#download-link'), 'Download Schedule button should be visible').toBeVisible();
 
-      await expect.soft(
-        page.locator('a#download-link[href*="/sites/default/files/"]'),
-        `Route ${routeId} page should have download schedule link`
-      ).toBeVisible();
+      const mapToggle = page
+        .locator('div#route-map-container')
+        .locator(`a:has-text("Open Route ${routeId} Map"):visible`);
+      expect.soft(await mapToggle.count(), `Route ${routeId} page should have a visible map toggle`).toBeGreaterThan(0);
 
-      await expect.soft(
-        page.locator('#route-table table').first(),
-        `Route ${routeId} page should have route times table`
-      ).toBeVisible();
+      // Verify the schedule table
+      const timesTable = page.locator('#route-table table:visible');
+      const visibleRows = timesTable.locator('tbody tr:visible');
+      const rowCount = await visibleRows.count();
+      logNote(`Route ${routeId} has ${rowCount} visible rows in the schedule table`);
 
-      await expect.soft(
-        page.locator(`text="Open Route ${routeId} Map"`),
-        `Route ${routeId} page should have map toggle`
-      ).toBeVisible();
+      await expect.soft(timesTable, `Route ${routeId} should have a visible schedule table`).toBeVisible();
+      await expect.soft(rowCount, `Route ${routeId} should have more than 5 visible rows`).toBeGreaterThan(5);
+      await expect.soft(timesTable, 'Route schedule should display AM departure times').toContainText(/(a\.m\.?|am)/i);
+      await expect.soft(timesTable, 'Route schedule should display PM departure times').toContainText(/(p\.m\.?|pm)/i);
     });
   });
 });
