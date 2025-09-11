@@ -6,7 +6,7 @@ import * as schedule from '../assertions/routeSchedule';
 
 test.describe('Route pages validation', () => {
   BUS_ROUTES.forEach((routeId) => {
-    test(`Tests for [${routeId}] stand alone page`, async ({ page }) => {
+    test(`Test route page [${routeId}] loads without errors`, async ({ page }) => {
       const routeUrl = `/plan-your-trip/routes/${routeId}`;
 
       await page.goto(routeUrl);
@@ -30,6 +30,13 @@ test.describe('Route pages validation', () => {
       expect.soft(pageTitle, `Route ${routeId} has a page title`).toBeTruthy();
       expect.soft(finalUrl.includes('chrome-error://'), `Route ${routeId} has chrome error`).toBeFalsy();
       expect.soft(isBadRedirect, `Route ${routeId} was redirected from ${routeUrl} to ${finalUrl}`).toBeFalsy();
+    });
+
+    test(`Test route [${routeId}] page elements`, async ({ page }) => {
+      const routeUrl = `/plan-your-trip/routes/${routeId}`;
+
+      await page.goto(routeUrl);
+      await common.closeSubscribePopup(page);
 
       // Check for required page elements
       await expect.soft(page.locator('a#download-link'), 'Download Schedule button should be visible').toBeVisible();

@@ -2,7 +2,12 @@ name: Scheduled Playwright Tests
 
 on:
   schedule:
-    - cron: "0 22 * * *" # daily at 10 PM UTC
+    - cron: "0 */6 * * *" # every 6 hours
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
   run-main-workflow:

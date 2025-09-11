@@ -49,7 +49,7 @@ export async function checkTimepointsToggle(page: Page) {
   // Expect all rows to start
   const initialRows = await getVisibleRowCount();
 
-  await takeScreenshot(page, 'before clicking Timepoints screenshot');
+  await takeScreenshot(page, 'before clicking Timepoints screenshot', { fullPage: true });
 
   // Click "Timepoints" button
   await page.locator('label.btn:has-text("Timepoints"):visible').click();
@@ -59,7 +59,7 @@ export async function checkTimepointsToggle(page: Page) {
     .toBeLessThan(initialRows);
   logNote(`There are ${timepointRows} visible rows in the route times table after clicking "Timepoints"`);
 
-  await takeScreenshot(page, 'after clicking Timepoints screenshot');
+  await takeScreenshot(page, 'after clicking Timepoints screenshot', { fullPage: true });
 
   // Click "All Stops" button
   await page.locator('label.btn:has-text("All stops"):visible').click();
@@ -67,5 +67,5 @@ export async function checkTimepointsToggle(page: Page) {
   expect.soft(allRows, 'All rows should be visible after clicking "All Stops"').toEqual(initialRows);
   logNote(`There are ${allRows} visible rows in the route times table after clicking "All Stops"`);
 
-  await takeScreenshot(page, 'after clicking All Stops screenshot');
+  await takeScreenshot(page, 'after clicking All Stops screenshot', { fullPage: true });
 }
