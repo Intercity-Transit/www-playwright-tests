@@ -2,7 +2,7 @@ name: Scheduled Playwright Tests
 
 on:
   schedule:
-    - cron: "0 */4 * * *" # every 4 hours
+    - cron: "0 22 * * *" # daily at 10 PM UTC
 
 jobs:
   run-main-workflow:
