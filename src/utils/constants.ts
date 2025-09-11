@@ -2,7 +2,6 @@
  * Bus route numbers used throughout the Intercity Transit system
  */
 export const BUS_ROUTES = [
-  '1',
   '12',
   '13',
   '14',
@@ -19,11 +18,12 @@ export const BUS_ROUTES = [
   '67',
   '68',
   '94',
-  '621',
-  '622',
+  'ONE',
+  '62A',
+  '62B',
 ] as const;
 
 /**
  * Type for bus route numbers
  */
-export type BusRoute = (typeof BUS_ROUTES)[number];
+export type BusRoute = (typeof BUS_ROUTES)[string];
