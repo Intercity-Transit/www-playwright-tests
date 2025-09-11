@@ -17,9 +17,7 @@ test.describe('Schedule a Ride page tests', () => {
 
     // Test how to ride section
     const howToRideSection = page.getByText('How to Ride Dial-A-Lift').first();
-    await expect
-      .soft(howToRideSection, "Page should contain 'How to Ride Dial-A-Lift' section")
-      .toBeVisible();
+    await expect.soft(howToRideSection, "Page should contain 'How to Ride Dial-A-Lift' section").toBeVisible();
 
     // Test TTY information
     const ttyMessage = page.getByText('for people with hearing or speaking difficulties').first();

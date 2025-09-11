@@ -4,8 +4,7 @@ import { takeScreenshot } from '../utils/screenshots';
 import * as common from '../assertions/common';
 
 test.describe('News and Alerts page tests', () => {
-  test('validate news and alerts page functionality', async ({ page }) => {
-    // Navigate to the page
+  test('validate page functionality', async ({ page }) => {
     await page.goto('/about-us/news-and-alerts');
     await common.closeSubscribePopup(page);
 
@@ -20,13 +19,12 @@ test.describe('News and Alerts page tests', () => {
     logNote(`✓ Found ${count} news articles on the page`);
 
     // Screenshot the list
-    await takeScreenshot(page, 'news and alerts list');
+    await takeScreenshot(page, 'news and alerts list', { fullPage: true });
 
     // Test article navigation
     const firstArticle = page.locator('#block-views-block-news-block-2 h2 a').first();
     const articleTitle = await firstArticle.textContent();
     await firstArticle.click();
-
 
     const detailH1 = page.locator('h1');
     await expect

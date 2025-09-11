@@ -33,14 +33,13 @@ test.describe(`Tests for search page @search`, () => {
     logNote('✓ Step 2: Search redirect confirmed');
 
     await common.closeSubscribePopup(page);
+    await takeScreenshot(page, 'search results', { fullPage: true });
 
     // Step 3: Confirm search page shows results (more than 2)
     const results = page.locator('div.main-container h3 > a');
     const count = await results.count();
     expect(count).toBeGreaterThan(2);
     logNote(`✓ Step 3: Found ${count} search results`);
-
-    await takeScreenshot(page, 'search results');
 
     // Step 4: Confirm we can click and goto the first result
     const firstResult = results.first();

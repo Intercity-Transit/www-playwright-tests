@@ -6,11 +6,7 @@ import { test, Page } from '../../global-setup';
  * @param name - Name/description for the screenshot attachment
  * @param options - Screenshot options (optional)
  */
-export async function takeScreenshot(
-  page: Page,
-  name: string,
-  options: { fullPage?: boolean } = {}
-): Promise<void> {
+export async function takeScreenshot(page: Page, name: string, options: { fullPage?: boolean } = {}): Promise<void> {
   const screenshot = await page.screenshot(options);
   await test.info().attach(name, {
     body: screenshot,
