@@ -7,6 +7,13 @@ on:
         description: "Base URL for tests"
         default: "https://www.intercitytransit.com"
         required: true
+  workflow_call:
+    inputs:
+      base_url:
+        description: "Base URL for tests"
+        default: "https://www.intercitytransit.com"
+        required: false
+        type: string
   pull_request:
     branches: [ main ]
   push:
