@@ -1,5 +1,6 @@
 import { test, expect } from '../../global-setup';
 import { logNote } from '../utils/logNote';
+import { takeScreenshot } from '../utils/screenshots';
 import * as common from '../assertions/common';
 import * as header from '../assertions/header';
 import * as footer from '../assertions/footer';
@@ -24,12 +25,7 @@ test.describe(`Tests for search page @search`, () => {
     await expect(searchInput).toBeVisible();
     await searchInput.fill('wheel');
 
-    // Take screenshot
-    let screenshot = await page.screenshot({ fullPage: true });
-    await testInfo.attach('search input', {
-      body: screenshot,
-      contentType: 'image/png',
-    });
+    await takeScreenshot(page, 'search input filled');
 
     // Wait for navigation to complete after pressing Enter
     await Promise.all([page.waitForNavigation(), searchInput.press('Enter')]);
@@ -44,12 +40,7 @@ test.describe(`Tests for search page @search`, () => {
     expect(count).toBeGreaterThan(2);
     logNote(`✓ Step 3: Found ${count} search results`);
 
-    // Take screenshot
-    screenshot = await page.screenshot({ fullPage: true });
-    await testInfo.attach('search results', {
-      body: screenshot,
-      contentType: 'image/png',
-    });
+    await takeScreenshot(page, 'search results');
 
     // Step 4: Confirm we can click and goto the first result
     const firstResult = results.first();
@@ -65,11 +56,6 @@ test.describe(`Tests for search page @search`, () => {
     await expect(page).toHaveURL(new RegExp(href!));
     logNote(`✓ Step 4: Successfully clicked and navigated to: ${href}`);
 
-    // Take screenshot
-    screenshot = await page.screenshot({ fullPage: true });
-    await testInfo.attach('search result article', {
-      body: screenshot,
-      contentType: 'image/png',
-    });
+    await takeScreenshot(page, 'search result article');
   });
 });

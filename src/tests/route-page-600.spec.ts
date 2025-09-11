@@ -1,68 +1,33 @@
 import { test, expect, Page, Locator } from '../../global-setup';
+import { logNote } from '../utils/logNote';
 import * as common from '../assertions/common';
 import * as footer from '../assertions/footer';
-import { logNote } from '../utils/logNote';
-import { testRouteScheduleBehavior } from '../common/routeScheduleBehavior';
+import * as schedule from '../assertions/routeSchedule';
 
-// Helper function to locate the times table.
-async function getTable(page: Page): Promise<Locator> {
-  const table = page.locator('#route-table table').last();
+const routeId = '600';
 
-  // Soft expect that the routes table exists
-  await expect.soft(table, 'Routes table should be present').toBeVisible();
-
-  return table;
-}
-
-test.describe('Tests for route 600 page @routes', () => {
+test.describe(`Tests for route ${routeId} page @routes`, () => {
   // Navigate to the specific page before each test.
   test.beforeEach(async ({ page }) => {
-    await page.goto('/plan-your-trip/routes/600');
+    await page.goto(`/plan-your-trip/routes/${routeId}`);
     await common.closeSubscribePopup(page);
   });
 
   test('Test the route page information @routes', async ({ page }) => {
-    // Find schedule download button
-    const downloadButton = page.locator('a#download-link.btn');
-    await expect.soft(downloadButton, 'Download button for route schedule should be present').toBeVisible();
-    await expect
-      .soft(downloadButton, 'Download button should contain "Download Schedule" text')
-      .toContainText('Download Schedule');
-
-    // Click the download button
-    const [response] = await Promise.all([
-      page.waitForResponse((response) => response.status() === 200),
-      downloadButton.click(),
-    ]);
-
-    expect.soft(response.url(), 'Download URL should contain .pdf').toContain('.pdf');
-    expect.soft(response.status(), 'Download should not return 404').not.toBe(404);
-    expect.soft(response.ok(), 'Download response should be successful').toBe(true);
-
-    // Get the table, after ajax load
-    const timesTable = await getTable(page);
-
-    // Verify times are present
-    await expect.soft(timesTable, 'Route schedule should display AM departure times').toContainText(/(a\.m\.?|am)/i);
-    await expect.soft(timesTable, 'Route schedule should display PM departure times').toContainText(/(p\.m\.?|pm)/i);
+    // Verify the schedule table
+    await schedule.checkRouteTable(page);
+    await schedule.checkAmPmTimes(page);
 
     // Verify special times
-
-    await expect.soft(timesTable, 'Route should include 5:03 a.m. departure time').toContainText('5:03 a.m.');
-    await expect.soft(timesTable, 'Route should include 8:49 p.m. departure time').toContainText('8:49 p.m.');
+    await schedule.checkTableContainsText(page, '5:03 a.m.');
+    await schedule.checkTableContainsText(page, '8:49 p.m.');
 
     // Verify key stops are included
-    await expect
-      .soft(timesTable, 'Route should include Olympia Transit Center as a stop')
-      .toContainText('Olympia Transit Center');
-
-    // Verify specific stops and times are present
-    await expect
-      .soft(timesTable, 'Route should include Lakewood Station Bay 5 as a stop')
-      .toContainText('Lakewood Station Bay 5');
+    await schedule.checkTableContainsText(page, 'Olympia Transit Center');
+    await schedule.checkTableContainsText(page, 'Lakewood Station Bay 5');
   });
 
   test('Test the schedule behavior on a route page @routes', async ({ page }) => {
-    await testRouteScheduleBehavior(page, true);
+    await schedule.checkTimepointsToggle(page);
   });
 });

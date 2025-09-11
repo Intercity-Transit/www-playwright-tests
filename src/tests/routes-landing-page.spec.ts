@@ -1,5 +1,6 @@
 import { test, expect } from '../../global-setup';
 import { logNote } from '../utils/logNote';
+import { takeScreenshot } from '../utils/screenshots';
 import * as common from '../assertions/common';
 import * as footer from '../assertions/footer';
 import { BUS_ROUTES } from '../utils/constants';
@@ -25,7 +26,7 @@ test.describe(`Tests for routes landing page @routes`, () => {
   });
 
   // Test specific routes are present.
-  test(`there's a link to each route ${BUS_ROUTES.join(', ')}`, async ({ page }) => {
+  test(`there's a link to each route, ${BUS_ROUTES.join(', ')}`, async ({ page }) => {
     const missingRoutes: string[] = [];
 
     for (const route of BUS_ROUTES) {
@@ -49,12 +50,7 @@ test.describe(`Tests for routes landing page @routes`, () => {
 
   // Test map.
   test('can click "Show map" link and see a map', async ({ page }, testInfo) => {
-    let screenshot = await page.screenshot();
-
-    await testInfo.attach('before clicking screenshot', {
-      body: screenshot,
-      contentType: 'image/png',
-    });
+    await takeScreenshot(page, 'before clicking Show map');
 
     const showMapLink = page.locator('a:has-text("Show map")');
     await expect(showMapLink).toBeVisible();
@@ -68,11 +64,6 @@ test.describe(`Tests for routes landing page @routes`, () => {
     const mapContainer = page.locator('[id*="map"], [class*="map"], canvas, iframe[src*="map"]').first();
     await expect(mapContainer).toBeVisible({ timeout: 10000 });
 
-    screenshot = await page.screenshot();
-
-    await testInfo.attach('after clicking Show map screenshot', {
-      body: screenshot,
-      contentType: 'image/png',
-    });
+    await takeScreenshot(page, 'after clicking Show map');
   });
 });
