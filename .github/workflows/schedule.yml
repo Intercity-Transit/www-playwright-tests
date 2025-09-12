@@ -2,7 +2,7 @@ name: Scheduled Playwright Tests
 
 on:
   schedule:
-    - cron: "0 */6 * * *" # every 6 hours
+    - cron: "0 22 * * *" # nightly at 10 pm
 
 permissions:
   contents: read
