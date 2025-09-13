@@ -1,0 +1,12 @@
+name: Live Schedule Trigger
+
+on:
+  schedule:
+    - cron: "0 22 * * *" # 10 PM UTC
+
+jobs:
+  call-manual:
+    uses: ./.github/workflows/manual.yml
+    with:
+      BASE_URL: "https://www.intercitytransit.com"
+      DESTINATION: "prod"

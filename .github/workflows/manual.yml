@@ -1,0 +1,43 @@
+name: Playwright Manual Run
+
+on:
+  workflow_dispatch:
+    inputs:
+      BASE_URL:
+        description: "Base URL for tests"
+        required: true
+        default: "https://www.intercitytransit.com"
+      DESTINATION:
+        description: "Folder to publish results into (prod/staging/manual-runs)"
+        required: true
+        default: "manual-runs"
+
+jobs:
+  test-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+
+      - run: npm ci
+      - run: npx playwright install --with-deps
+
+      - name: Run Playwright Tests
+        run: |
+          echo "Running tests against ${{ github.event.inputs.BASE_URL }}"
+          npx playwright test --reporter=html
+        env:
+          BASE_URL: ${{ github.event.inputs.BASE_URL }}
+
+      - name: Deploy Results
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: playwright-report
+          destination_dir: ${{ github.event.inputs.DESTINATION }}
+          keep_files: true

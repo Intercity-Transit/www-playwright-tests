@@ -1,0 +1,12 @@
+name: QA Schedule Trigger
+
+on:
+  schedule:
+    - cron: "0 18 * * *" # 6 PM UTC
+
+jobs:
+  call-manual:
+    uses: ./.github/workflows/manual.yml
+    with:
+      BASE_URL: "https://test-intercity-transit.pantheonsite.io/"
+      DESTINATION: "staging"
