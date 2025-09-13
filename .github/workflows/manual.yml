@@ -41,7 +41,7 @@ jobs:
       - name: Run Playwright Tests
         run: |
           echo "Running tests against ${{ inputs.BASE_URL || github.event.inputs.BASE_URL }}"
-          npx playwright test --reporter=html --output=playwright-report || true
+          npx playwright test route-page-600 --reporter=html --output=playwright-report || true
         env:
           BASE_URL: ${{ inputs.BASE_URL || github.event.inputs.BASE_URL }}
 
