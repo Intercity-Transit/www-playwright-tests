@@ -1,16 +1,17 @@
-name: Live Schedule Trigger
+name: Scheduled Prod Playwright Tests
 
 on:
   schedule:
-    - cron: "*/15 * * * *" # Every 15 minutes
+    - cron: "*/5 * * * *" # Every 5 minutes
+    # - cron: "0 22 * * *" # every day at 10 PM UTC
 
 permissions:
   pages: write
   id-token: write
 
 jobs:
-  call-manual:
-    uses: ./.github/workflows/manual.yml
+  call-main:
+    uses: ./.github/workflows/main.yml
     with:
       BASE_URL: "https://test-intercity-transit.pantheonsite.io/"
       # BASE_URL: "https://www.intercitytransit.com"
