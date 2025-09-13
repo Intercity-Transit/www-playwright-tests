@@ -8,6 +8,7 @@ import * as footer from '../assertions/footer';
 test.describe(`Tests for search page @search`, () => {
   // Navigate to the specific page before each test.
   test.beforeEach(async ({ page }) => {
+    logNote('Starting search page test');
     await page.goto('/');
     await common.closeSubscribePopup(page);
   });

@@ -7,6 +7,7 @@ import * as footer from '../assertions/footer';
 test.describe(`Tests for the homepage`, () => {
   // Before each test, navigate to the homepage and close any popups
   test.beforeEach(async ({ page }) => {
+    logNote('Starting homepage test');
     await page.goto('/');
     await common.closeSubscribePopup(page);
   });

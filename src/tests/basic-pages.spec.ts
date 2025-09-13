@@ -6,10 +6,21 @@ import * as header from '../assertions/header';
 import * as footer from '../assertions/footer';
 
 constants.basicPagesCollection.forEach((slug) => {
-  test.describe(`Test common page elements`, () => {
-    test(`validate [${slug}] elements`, async ({ page }) => {
+  test.describe(`Test common page elements for ${slug}`, () => {
+    test.beforeEach(async ({ page }) => {
+      logNote(`Starting test for page ${slug}`);
       await page.goto(slug);
       await common.closeSubscribePopup(page);
+    });
+
+    test(`validate elements`, async ({ page }) => {
+      // Test page status
+      await expect
+        .soft(async () => {
+          const response = page.url() ? await page.goto(page.url()) : null;
+          expect(response?.status()).toBeLessThan(400);
+        }, `${slug} should not return 4xx or 5xx status code`)
+        .toPass();
 
       // Test page elements
       await expect
@@ -34,6 +45,15 @@ constants.basicPagesCollection.forEach((slug) => {
         .soft(async () => {
           await footer.assertFooterHasContactFormLink(page);
         }, `${slug} footer should contain contact form link`)
+        .toPass();
+
+      await expect
+        .soft(async () => {
+          const contentDiv = page.locator('div.region-content');
+          const textContent = await contentDiv.textContent();
+          const wordCount = textContent?.trim().split(/\s+/).length || 0;
+          expect(wordCount).toBeGreaterThanOrEqual(100);
+        }, `${slug} should have at least 100 words of content`)
         .toPass();
     });
   });

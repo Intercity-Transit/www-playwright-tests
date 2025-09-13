@@ -9,6 +9,7 @@ const routeId = '600';
 test.describe(`Tests for route ${routeId} page @routes`, () => {
   // Navigate to the specific page before each test.
   test.beforeEach(async ({ page }) => {
+    logNote(`Starting route ${routeId} page test`);
     await page.goto(`/plan-your-trip/routes/${routeId}`);
     await common.closeSubscribePopup(page);
   });
