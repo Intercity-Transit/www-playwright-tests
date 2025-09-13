@@ -12,6 +12,19 @@ on:
         required: true
         default: "manual-runs"
 
+  workflow_call:
+    inputs:
+      BASE_URL:
+        description: "Base URL for tests"
+        required: true
+        type: string
+        default: "https://dev-intercity-transit.pantheonsite.io/"
+      DESTINATION:
+        description: "Folder to publish results into (prod/staging/manual-runs)"
+        required: true
+        type: string
+        default: "manual-runs"
+
 permissions:
   contents: write
 
@@ -32,10 +45,13 @@ jobs:
 
       - name: Run Playwright Tests
         run: |
-          echo "Running tests against ${{ github.event.inputs.BASE_URL }}"
-          npx playwright test --reporter=html || true
+          echo "Running tests against ${{ inputs.BASE_URL || github.event.inputs.BASE_URL }}"
+          npx playwright test --reporter=html --output=playwright-report || true
         env:
-          BASE_URL: ${{ github.event.inputs.BASE_URL }}
+          BASE_URL: ${{ inputs.BASE_URL || github.event.inputs.BASE_URL }}
+
+      - name: Verify report exists
+        run: ls -R playwright-report || echo "playwright-report missing!"
 
       - name: Deploy Results (always run)
         if: always()
@@ -43,6 +59,5 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: playwright-report
-          destination_dir: ${{ github.event.inputs.DESTINATION }}
+          destination_dir: ${{ inputs.DESTINATION || github.event.inputs.DESTINATION }}
           keep_files: true
-

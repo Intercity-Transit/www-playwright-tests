@@ -4,7 +4,7 @@ export default defineConfig({
   testDir: './src/tests',
   reporter: [['list'], ['html', { outputFolder: 'test-results', open: 'never' }]],
   use: {
-    baseURL: process.env.BASE_URL || 'https://www.intercitytransit.com',
+    baseURL: process.env.BASE_URL || 'https://dev-intercity-transit.pantheonsite.io/',
     headless: true,
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',

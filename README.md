@@ -4,17 +4,17 @@ Playwright test suite for the Intercity Transit website.
 
 For detailed Playwright documentation, see https://playwright.dev/.
 
-Playwright is a testing framework to automate end-to-end browser test for websites. It's used in the termal, runs tests a headless (or headed) browser, and generates detailed reports of the results.
+Playwright is a testing framework to automate end-to-end browser test for websites. It can be run in the terminal and uses a headless (or headed) browser, creating reports of test results.
 
 ## Viewing Test Results
 
-The tests are scheduled in `.github/workflows` and test runs can be viewed online at
+The Github runs are scheduled in `.github/workflows` and can be viewed online at:
 
   - Live site tests → https://intercity-transit.github.io/www-playwright-tests/prod/
-  - QA site tests → https://intercity-transit.github.io/www-playwright-tests/staging/
+  - QA site tests → https://intercity-transit.github.io/www-playwright-tests/qa-site/
   - Manual test runs → https://intercity-transit.github.io/www-playwright-tests/manual-runs/
 
-To trigger a manual test run, and provide any BASE_URL, go to https://github.com/Intercity-Transit/www-playwright-tests/actions.
+To trigger a manual run and provide the URL for any test site go to https://github.com/Intercity-Transit/www-playwright-tests/actions.
 
 
 ## Setup
@@ -62,6 +62,9 @@ npm run test:run-and-save
 ```bash
 # Run tests against a dev site
 BASE_URL=https://dev-intercity-transit.pantheonsite.io/ npx playwright test
+
+# Or, use the options in package.json to test src/tests/route-page-600.spec.ts
+npm run test:lando route-page-600
 ```
 
 ### View Results
