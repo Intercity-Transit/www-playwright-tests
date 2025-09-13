@@ -2,8 +2,7 @@ name: Scheduled Prod Playwright Tests
 
 on:
   schedule:
-    - cron: "*/5 * * * *" # every 5 minutes for debugging
-    # - cron: "0 22 * * *" # nightly at 10 PM UTC
+    - cron: "0 4,22 * * *" # daily at 4 AM and 10 PM UTC
 
 permissions:
   contents: read
