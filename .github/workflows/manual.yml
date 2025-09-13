@@ -1,4 +1,4 @@
-name: Playwright Tests
+name: Run Playwright Tests
 
 on:
   workflow_dispatch:
@@ -6,7 +6,7 @@ on:
       BASE_URL:
         description: "Base URL for tests"
         required: true
-        default: "https://dev-intercity-transit.pantheonsite.io/"
+        default: "https://test-intercity-transit.pantheonsite.io/"
 
   workflow_call:
     inputs:
@@ -14,7 +14,7 @@ on:
         description: "Base URL for tests"
         required: true
         type: string
-        default: "https://dev-intercity-transit.pantheonsite.io/"
+        default: "https://test-intercity-transit.pantheonsite.io/"
 
 permissions:
   contents: read
@@ -41,7 +41,7 @@ jobs:
       - name: Run Playwright Tests
         run: |
           echo "Running tests against ${{ inputs.BASE_URL || github.event.inputs.BASE_URL }}"
-          npx playwright test route-page-21 --reporter=html --output=playwright-report || true
+          npx playwright test --reporter=html --output=playwright-report || true
         env:
           BASE_URL: ${{ inputs.BASE_URL || github.event.inputs.BASE_URL }}
 
