@@ -41,4 +41,4 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: playwright-report
           destination_dir: ${{ github.event.inputs.DESTINATION }}
-          keep_files: true
+          keep_files: true
