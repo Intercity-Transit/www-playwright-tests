@@ -1,4 +1,4 @@
-name: QA Schedule Trigger
+name: Live Schedule Trigger
 
 on:
   schedule:
@@ -9,4 +9,4 @@ jobs:
     uses: ./.github/workflows/manual.yml
     with:
       BASE_URL: "https://test-intercity-transit.pantheonsite.io/"
-      DESTINATION: "qa-site"
+      # BASE_URL: "https://www.intercitytransit.com"

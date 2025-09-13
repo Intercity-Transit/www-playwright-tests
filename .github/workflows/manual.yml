@@ -1,4 +1,4 @@
-name: Playwright Manual Run
+name: Playwright Tests
 
 on:
   workflow_dispatch:
@@ -7,10 +7,6 @@ on:
         description: "Base URL for tests"
         required: true
         default: "https://dev-intercity-transit.pantheonsite.io/"
-      DESTINATION:
-        description: "Folder to publish results into (prod/staging/manual-runs)"
-        required: true
-        default: "manual-runs"
 
   workflow_call:
     inputs:
@@ -19,22 +15,21 @@ on:
         required: true
         type: string
         default: "https://dev-intercity-transit.pantheonsite.io/"
-      DESTINATION:
-        description: "Folder to publish results into (prod/staging/manual-runs)"
-        required: true
-        type: string
-        default: "manual-runs"
 
 permissions:
-  contents: write
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
   test-and-deploy:
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-node@v4
         with:
           node-version: 18
@@ -46,18 +41,15 @@ jobs:
       - name: Run Playwright Tests
         run: |
           echo "Running tests against ${{ inputs.BASE_URL || github.event.inputs.BASE_URL }}"
-          npx playwright test route-page-600 --reporter=html --output=playwright-report || true
+          npx playwright test --reporter=html --output=playwright-report || true
         env:
           BASE_URL: ${{ inputs.BASE_URL || github.event.inputs.BASE_URL }}
 
-      - name: Verify report exists
-        run: ls -R playwright-report || echo "playwright-report missing!"
-
-      - name: Deploy Results (always run)
-        if: always()
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Upload report artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: playwright-report
-          destination_dir: ${{ inputs.DESTINATION || github.event.inputs.DESTINATION }}
-          keep_files: true
+          path: playwright-report
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

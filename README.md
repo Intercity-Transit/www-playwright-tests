@@ -8,13 +8,11 @@ Playwright is a testing framework to automate end-to-end browser test for websit
 
 ## Viewing Test Results
 
-The Github runs are scheduled in `.github/workflows` and can be viewed online at:
+The Github runs are scheduled in `.github/workflows` and can be viewed online.
 
-  - Live site tests → https://intercity-transit.github.io/www-playwright-tests/prod/
-  - QA site tests → https://intercity-transit.github.io/www-playwright-tests/qa-site/
-  - Manual test runs → https://intercity-transit.github.io/www-playwright-tests/manual-runs/
+  - Test results → https://intercity-transit.github.io/www-playwright-tests
 
-To trigger a manual run and provide the URL for any test site go to https://github.com/Intercity-Transit/www-playwright-tests/actions.
+To trigger a manual run (and specify the BASE_URL of your test site) go to https://github.com/Intercity-Transit/www-playwright-tests/actions.
 
 
 ## Setup
