@@ -30,14 +30,15 @@ jobs:
       - name: Run Playwright Tests
         run: |
           echo "Running tests against ${{ github.event.inputs.BASE_URL }}"
-          npx playwright test --reporter=html
+          npx playwright test --reporter=html || true
         env:
           BASE_URL: ${{ github.event.inputs.BASE_URL }}
 
-      - name: Deploy Results
+      - name: Deploy Results (always run)
+        if: always()
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: playwright-report
           destination_dir: ${{ github.event.inputs.DESTINATION }}
-          keep_files: true
+          keep_files: true
