@@ -4,6 +4,10 @@ on:
   schedule:
     - cron: "*/15 * * * *" # Every 15 minutes
 
+permissions:
+  pages: write
+  id-token: write
+
 jobs:
   call-manual:
     uses: ./.github/workflows/manual.yml
