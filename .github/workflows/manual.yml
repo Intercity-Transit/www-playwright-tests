@@ -6,7 +6,7 @@ on:
       BASE_URL:
         description: "Base URL for tests"
         required: true
-        default: "https://www.intercitytransit.com"
+        default: "https://dev-intercity-transit.pantheonsite.io/"
       DESTINATION:
         description: "Folder to publish results into (prod/staging/manual-runs)"
         required: true
@@ -45,3 +45,4 @@ jobs:
           publish_dir: playwright-report
           destination_dir: ${{ github.event.inputs.DESTINATION }}
           keep_files: true
+
