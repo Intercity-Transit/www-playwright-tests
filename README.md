@@ -6,6 +6,17 @@ For detailed Playwright documentation, see https://playwright.dev/.
 
 Playwright is a testing framework to automate end-to-end browser test for websites. It's used in the termal, runs tests a headless (or headed) browser, and generates detailed reports of the results.
 
+## Viewing Test Results
+
+The tests are scheduled in `.github/workflows` and test runs can be viewed online at
+
+  - Live site tests → https://intercity-transit.github.io/www-playwright-tests/prod/
+  - QA site tests → https://intercity-transit.github.io/www-playwright-tests/staging/
+  - Manual test runs → https://intercity-transit.github.io/www-playwright-tests/manual-runs/
+
+To trigger a manual test run, and provide any BASE_URL, go to https://github.com/Intercity-Transit/www-playwright-tests/actions.
+
+
 ## Setup
 
 ### Prerequisites
