@@ -2,8 +2,8 @@ name: Scheduled Prod Playwright Tests
 
 on:
   schedule:
-    - cron: "*/5 * * * *" # Every 5 minutes
-    # - cron: "0 22 * * *" # every day at 10 PM UTC
+    - cron: "*/5 * * * *" # every 5 minutes for debugging
+    # - cron: "0 22 * * *" # nightly at 10 PM UTC
 
 permissions:
   pages: write
@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   call-main:
-    uses: ./.github/workflows/main.yml
+    uses: Intercity-Transit/www-playwright-tests/.github/workflows/main.yml@main
     with:
       BASE_URL: "https://test-intercity-transit.pantheonsite.io/"
       # BASE_URL: "https://www.intercitytransit.com"
