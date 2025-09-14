@@ -15,7 +15,7 @@ test.describe('Route pages validation', () => {
         await common.closeSubscribePopup(page);
       });
 
-      test(`loads without redirects`, async ({ page }) => {
+      test(`page loads without redirects`, async ({ page }) => {
         await common.watchForPageErrors(page);
 
         // Add thorough checks that we landed on the route page

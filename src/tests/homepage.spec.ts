@@ -43,7 +43,7 @@ test.describe(`Tests for the homepage`, () => {
     );
     const routesCount = routes.length;
 
-    await expect.soft(routesCount, 'should show at least 18 routes').toBeGreaterThanOrEqual(18);
+    await expect.soft(routesCount, 'Bus routes list should show at least 18 items').toBeGreaterThanOrEqual(18);
     logNote(`Number of routes found: ${routesCount}`);
 
     // Log the routes shown
