@@ -8,6 +8,7 @@ import * as footer from '../assertions/footer';
 test.describe(`Tests for search page @search`, () => {
   // Navigate to the specific page before each test.
   test.beforeEach(async ({ page }) => {
+    logNote('Starting search page test');
     await page.goto('/');
     await common.closeSubscribePopup(page);
   });
@@ -18,7 +19,7 @@ test.describe(`Tests for search page @search`, () => {
   }, testInfo) => {
     // Step 1: Confirm the header search form exists
     await header.assertHeaderHasSearchForm(page);
-    logNote('✓ Step 1: Header search form confirmed');
+    logNote('Header search form confirmed');
 
     // Step 2: Confirm entering text and hitting enter redirects
     const searchInput = page.locator('.region-header-top input[type="search"]');
@@ -30,7 +31,7 @@ test.describe(`Tests for search page @search`, () => {
     // Wait for navigation to complete after pressing Enter
     await Promise.all([page.waitForNavigation(), searchInput.press('Enter')]);
     await expect(page).toHaveURL(/search\/wheel/);
-    logNote('✓ Step 2: Search redirect confirmed');
+    logNote('Search redirect confirmed');
 
     await common.closeSubscribePopup(page);
     await takeScreenshot(page, 'search results', { fullPage: true });
@@ -39,7 +40,7 @@ test.describe(`Tests for search page @search`, () => {
     const results = page.locator('div.main-container h3 > a');
     const count = await results.count();
     expect(count).toBeGreaterThan(2);
-    logNote(`✓ Step 3: Found ${count} search results`);
+    logNote(`Found ${count} search results`);
 
     // Step 4: Confirm we can click and goto the first result
     const firstResult = results.first();
@@ -53,7 +54,7 @@ test.describe(`Tests for search page @search`, () => {
 
     // Verify we navigated to the clicked result
     await expect(page).toHaveURL(new RegExp(href!));
-    logNote(`✓ Step 4: Successfully clicked and navigated to: ${href}`);
+    logNote(`Successfully clicked and navigated to: ${href}`);
 
     await takeScreenshot(page, 'search result article');
   });

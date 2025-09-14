@@ -26,7 +26,7 @@ export async function closeSubscribePopup(page: Page) {
 /**
  * Capture uncaught JavaScript exceptions on the page.
  */
-export async function watchForPageErrors(page: Page, slug: string) {
+export async function watchForPageErrors(page: Page) {
   const jsErrors: string[] = [];
 
   page.on('pageerror', (err) => {
@@ -37,10 +37,10 @@ export async function watchForPageErrors(page: Page, slug: string) {
   await page.waitForTimeout(1000);
 
   if (jsErrors.length > 0) {
-    jsErrors.forEach((msg) => logNote(`JavaScript error on ${slug}: ${msg}`));
+    jsErrors.forEach((msg) => logNote(`JavaScript error: ${msg}`));
   }
 
-  expect.soft(jsErrors.length, `JavaScript errors detected on ${slug}`).toBe(0);
+  expect.soft(jsErrors.length, `Expect no JavaScript errors`).toBe(0);
 }
 
 /**

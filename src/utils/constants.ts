@@ -33,12 +33,14 @@ export type BusRoute = (typeof BUS_ROUTES)[string];
  */
 export const basicPagesCollection = [
   '/',
+  '/about-us/news-and-alerts',
+  '/agency/community-advisory-committee/meetings',
+  '/agency/transit-authority/meetings',
+  '/bus/accessible-services',
   '/contact',
   '/employment',
-  '/bus/accessible-services',
-  '/about-us/news-and-alerts',
-  '/agency/transit-authority/meetings',
   '/how-to-ride/parks-by-bus',
+  '/how-to-ride/safety-and-rules',
   '/plan-your-trip/routes',
   '/plan-your-trip/routes/41',
 ] as const;

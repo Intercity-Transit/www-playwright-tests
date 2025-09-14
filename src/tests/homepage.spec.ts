@@ -7,6 +7,7 @@ import * as footer from '../assertions/footer';
 test.describe(`Tests for the homepage`, () => {
   // Before each test, navigate to the homepage and close any popups
   test.beforeEach(async ({ page }) => {
+    logNote('Starting homepage test');
     await page.goto('/');
     await common.closeSubscribePopup(page);
   });
@@ -14,28 +15,26 @@ test.describe(`Tests for the homepage`, () => {
   test('page elements test', async ({ page }) => {
     await takeScreenshot(page, 'homepage loaded', { fullPage: true });
 
-    // Extract locators
+    // Test frequent tasks section
     const frequentTasksHeading = page.locator('h2:has-text("Frequent Tasks")');
-    const frequentTasksItems = page.locator('div.view-id-home_featured_tasks div.homeFeaturedLinks');
-    const busSchedulesLink = page.locator(
-      'div.main-container a[href="/plan-your-trip/routes"]:has-text("Bus Schedules")'
-    );
-
-    // Test page elements
     await expect.soft(frequentTasksHeading, 'Heading with "Frequent Tasks" should be visible').toBeVisible();
 
-    const count = await frequentTasksItems.count();
-    await expect.soft(count, 'page should show at least 5 Frequent Tasks').toBeGreaterThanOrEqual(5);
-    logNote(`Number of frequent tasks found: ${count}`);
+    const frequentTasksCount = await page.locator('div.view-id-home_featured_tasks div.homeFeaturedLinks').count();
+    await expect.soft(frequentTasksCount, 'page should show at least 5 Frequent Tasks').toBeGreaterThanOrEqual(5);
+    logNote(`Number of frequent tasks found: ${frequentTasksCount}`);
 
-    await expect.soft(busSchedulesLink, 'Bus Schedules link should be visible in main container').toBeVisible();
+    // Test news section
+    const newsHeading = page.locator('#block-views-block-news-block-1 h2:has-text("News")');
+    await expect.soft(newsHeading, 'Heading with "News" should be visible').toBeVisible();
+
+    const newsLinksCount = await page.locator('#block-views-block-news-block-1 a').count();
+    await expect.soft(newsLinksCount, 'News block should contain at least 4 news links').toBeGreaterThanOrEqual(4);
+    logNote(`Number of news links found: ${newsLinksCount}`);
   });
 
   test('homepage bus information test', async ({ page }) => {
-    // Extract locators
-    const schedulesLink = page.locator('div.main-container a[href="/plan-your-trip/routes"]:has-text("Bus Schedules")');
-
     // Test schedules link
+    const schedulesLink = page.locator('div.main-container a[href="/plan-your-trip/routes"]:has-text("Bus Schedules")');
     await expect.soft(schedulesLink, 'page should have a visible Bus Schedules link').toBeVisible();
 
     // Test routes count

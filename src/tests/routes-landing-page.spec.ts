@@ -8,6 +8,7 @@ import { BUS_ROUTES } from '../utils/constants';
 test.describe(`Tests for routes landing page @routes`, () => {
   // Navigate to the specific page before each test.
   test.beforeEach(async ({ page }) => {
+    logNote('Starting routes landing page test');
     await page.goto('/plan-your-trip/routes');
     await common.closeSubscribePopup(page);
   });

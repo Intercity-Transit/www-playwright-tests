@@ -1,12 +1,15 @@
 import { test, expect, Page, Locator } from '../../global-setup';
+import { logNote } from '../utils/logNote';
 import * as common from '../assertions/common';
 
 test.describe('Schedule a Ride page tests', () => {
-  test('validate schedule a ride page content', async ({ page }) => {
-    // Navigate to the page
+  test.beforeEach(async ({ page }) => {
+    logNote('Starting schedule a ride page test');
     await page.goto('/dial-a-lift/schedule-a-ride');
     await common.closeSubscribePopup(page);
+  });
 
+  test('validate schedule a ride page content', async ({ page }) => {
     // Test page heading
     const h1 = page.locator('h1');
     await expect.soft(h1, 'Page should have correct heading').toContainText('Scheduling a Ride');

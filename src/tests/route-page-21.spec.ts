@@ -9,6 +9,7 @@ const routeId = '21';
 test.describe(`Tests for route ${routeId} page @routes`, () => {
   // Navigate to the specific page before each test.
   test.beforeEach(async ({ page }) => {
+    logNote(`Starting route ${routeId} page test`);
     await page.goto(`/plan-your-trip/routes/${routeId}`);
     await common.closeSubscribePopup(page);
   });
@@ -19,7 +20,7 @@ test.describe(`Tests for route ${routeId} page @routes`, () => {
     await schedule.checkAmPmTimes(page);
 
     // Verify special times
-    await schedule.checkTableContainsText(page, '6:00 a.m.');
+    await schedule.checkTableContainsText(page, '7:30 a.m.');
     await schedule.checkTableContainsText(page, '10:12 p.m.');
 
     // Verify key stops are included
