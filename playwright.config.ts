@@ -7,7 +7,7 @@ export default defineConfig({
     baseURL: process.env.BASE_URL || 'https://test-intercity-transit.pantheonsite.io/',
     headless: true,
     trace: 'on-first-retry',
-    screenshot: 'only-on-failure',
+    screenshot: 'on',
   },
   projects: [
     {

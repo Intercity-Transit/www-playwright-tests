@@ -1,7 +1,9 @@
 import { test, expect } from '../../global-setup';
+import { logNote } from '../utils/logNote';
 
 test.describe('Hook Test', () => {
   test.beforeEach(async ({ page }) => {
+    logNote('Starting hook test');
     await page.goto('/');
   });
 

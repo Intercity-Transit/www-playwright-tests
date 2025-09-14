@@ -21,8 +21,8 @@ export async function checkRouteTable(page: Page) {
   const visibleRows = timesTable.locator('tbody tr:visible');
   const rowCount = await visibleRows.count();
 
-  await expect.soft(rowCount, `Route should have more than 5 visible rows`).toBeGreaterThan(5);
-  logNote(`There are ${rowCount} visible rows in the route times table`);
+  await expect.soft(rowCount, `A route timetable should have more than 5 visible rows`).toBeGreaterThan(5);
+  logNote(`There are ${rowCount} visible rows in the route's timetable`);
 }
 
 /**

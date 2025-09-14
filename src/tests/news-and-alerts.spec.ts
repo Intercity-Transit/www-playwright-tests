@@ -4,10 +4,13 @@ import { takeScreenshot } from '../utils/screenshots';
 import * as common from '../assertions/common';
 
 test.describe('News and Alerts page tests', () => {
-  test('validate page functionality', async ({ page }) => {
+  test.beforeEach(async ({ page }) => {
+    logNote('Starting news and alerts page test');
     await page.goto('/about-us/news-and-alerts');
     await common.closeSubscribePopup(page);
+  });
 
+  test('validate page functionality', async ({ page }) => {
     // Test page heading
     const h1 = page.locator('h1');
     await expect.soft(h1, 'Page should have correct heading').toContainText('News and Alerts');

@@ -19,17 +19,16 @@ test.beforeEach(async ({ page }, testInfo) => {
 
 // Add global afterEach hook
 test.afterEach(async ({ page }, testInfo) => {
+  // Always log test completion status first
+  logNote(`Test completed with status: ${testInfo.status}`);
+
   // Take a screenshot after each test
-  try {
-    const screenshot = await page.screenshot({ fullPage: true });
-    await testInfo.attach('final-screenshot', {
-      body: screenshot,
-      contentType: 'image/png',
-    });
-    logNote(`Screenshot taken for test: ${testInfo.title}`);
-  } catch (error) {
-    logNote(`Failed to take screenshot: ${error}`);
-  }
+  const screenshot = await page.screenshot({ fullPage: true });
+  await testInfo.attach('final-screenshot', {
+    body: screenshot,
+    contentType: 'image/png',
+  });
+  logNote(`Screenshot taken for test: ${testInfo.title}`);
 });
 
 export { expect, Page, Locator } from '@playwright/test';
