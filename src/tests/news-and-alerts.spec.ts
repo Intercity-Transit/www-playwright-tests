@@ -31,7 +31,7 @@ test.describe('News and Alerts page tests', () => {
 
     const detailH1 = page.locator('h1');
     await expect
-      .soft(detailH1, 'Article detail page should display the correct article title')
+      .soft(detailH1, 'Article page should display the correct article title')
       .toHaveText(articleTitle ?? '');
     logNote(`✓ Successfully navigated to article: ${articleTitle}`);
 

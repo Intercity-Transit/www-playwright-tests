@@ -27,7 +27,7 @@ test.describe(`Tests for routes landing page @routes`, () => {
   });
 
   // Test specific routes are present.
-  test(`there's a link to each route, ${BUS_ROUTES.join(', ')}`, async ({ page }) => {
+  test(`there's a link to each route: ${BUS_ROUTES.join(', ')}`, async ({ page }) => {
     const missingRoutes: string[] = [];
 
     for (const route of BUS_ROUTES) {
