@@ -11,7 +11,7 @@ on:
   workflow_call:
     inputs:
       BASE_URL:
-        description: "Base URL for tests"
+        description: "Base URL for tests (e.g. https://www.intercitytransit.com)"
         required: true
         type: string
         default: "https://test-intercity-transit.pantheonsite.io/"
