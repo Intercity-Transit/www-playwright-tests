@@ -6,13 +6,14 @@ export const test = base.extend({});
 
 // Add global beforeEach hook
 test.beforeEach(async ({ page }, testInfo) => {
+  const timestamp = new Date().toISOString();
   // Add URL annotation at start of test
-  logNote(`Beginning URL → ${page.url()}`);
+  logNote(`Beginning URL → ${page.url()} at ${timestamp}`);
 
   // Listen to all navigation events
   page.on('framenavigated', (frame) => {
     if (frame === page.mainFrame()) {
-      logNote(`Navigation → ${frame.url()}`);
+      logNote(`Navigation → ${frame.url()} at ${timestamp}`);
     }
   });
 });
