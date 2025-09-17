@@ -11,8 +11,9 @@ import { logNote } from './logNote';
  */
 export async function fetchApiWithRetry(request: any, url: string, maxRetries: number = 3) {
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    logNote(`Fetching API (attempt ${attempt}/${maxRetries}): ${url}`);
     try {
-      const response = await request.get(url, { timeout: 10000 });
+      const response = await request.get(url, { timeout: 15000 });
 
       if (response.ok()) {
         return await response.json();

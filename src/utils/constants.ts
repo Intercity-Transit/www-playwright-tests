@@ -23,10 +23,18 @@ export const BUS_ROUTES = [
   'ONE', // aka 100
 ] as const;
 
+
+export const numericBusRouteIds = BUS_ROUTES.map((id: string) => {
+  if (id === '62A') return '621';
+  if (id === '62B') return '622';
+  if (id === 'ONE') return '100';
+  return id;
+});
+
 /**
  * Type for bus route numbers
  */
-export type BusRoute = (typeof BUS_ROUTES)[string];
+export type BusRoute = typeof BUS_ROUTES[number];
 
 /**
  * Collection of basic pages used for testing common page elements
