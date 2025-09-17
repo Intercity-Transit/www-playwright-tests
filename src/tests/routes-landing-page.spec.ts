@@ -27,7 +27,7 @@ test.describe(`Tests for routes landing page @routes`, () => {
   });
 
   // Test specific routes are present.
-  test(`there's a link to each route: ${BUS_ROUTES.join(', ')}`, async ({ page }) => {
+  test(`there's a link to each route on the routes page: ${BUS_ROUTES.join(', ')}`, async ({ page }) => {
     const missingRoutes: string[] = [];
 
     for (const route of BUS_ROUTES) {
@@ -50,7 +50,7 @@ test.describe(`Tests for routes landing page @routes`, () => {
   });
 
   // Test map.
-  test('can click "Show map" link and see a map', async ({ page }, testInfo) => {
+  test('can click "Show map" link and see a map on the routes page', async ({ page }, testInfo) => {
     await takeScreenshot(page, 'before clicking Show map');
 
     const showMapLink = page.locator('a:has-text("Show map")');

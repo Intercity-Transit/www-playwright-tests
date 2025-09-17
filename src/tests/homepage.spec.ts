@@ -12,7 +12,7 @@ test.describe(`Tests for the homepage`, () => {
     await common.closeSubscribePopup(page);
   });
 
-  test('page elements test', async ({ page }) => {
+  test('main page elements test', async ({ page }) => {
     await takeScreenshot(page, 'homepage loaded', { fullPage: true });
 
     // Test frequent tasks section
@@ -32,7 +32,7 @@ test.describe(`Tests for the homepage`, () => {
     logNote(`Number of news links found: ${newsLinksCount}`);
   });
 
-  test('homepage bus information test', async ({ page }) => {
+  test('routes section elements test', async ({ page }) => {
     // Test schedules link
     const schedulesLink = page.locator('div.main-container a[href="/plan-your-trip/routes"]:has-text("Bus Schedules")');
     await expect.soft(schedulesLink, 'page should have a visible Bus Schedules link').toBeVisible();
@@ -52,5 +52,11 @@ test.describe(`Tests for the homepage`, () => {
       .map((r) => r?.trim())
       .join('\n');
     logNote(`Routes listed:\n${routeList}`);
+
+    // Test "Select a Stop" has items
+    await page.locator('#block-routeandtripformsblock ul.nav >> text=Stops').click();
+    const stops = await page.$$eval('select#edit-stop option', (opts) => opts.map((o) => o.textContent));
+    await expect.soft(stops.length, '"Select a Stop" should show at least 100 items').toBeGreaterThanOrEqual(100);
+    logNote(`Number of stops found: ${stops.length}`);
   });
 });
