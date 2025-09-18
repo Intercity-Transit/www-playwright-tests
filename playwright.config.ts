@@ -5,7 +5,6 @@ export default defineConfig({
   reporter: [['list'], ['html', { outputFolder: 'test-results', open: 'never' }]],
   use: {
     baseURL: process.env.BASE_URL || 'https://test-intercity-transit.pantheonsite.io/',
-    headless: true,
     trace: 'on-first-retry',
     screenshot: 'on',
   },

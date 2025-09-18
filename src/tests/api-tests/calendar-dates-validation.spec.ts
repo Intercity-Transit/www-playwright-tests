@@ -86,16 +86,12 @@ test.describe('Calendar Dates API Validation @api-test', () => {
     logNote(`Today's (${today}) data: ${JSON.stringify(todayData)}`);
   });
 
-  test("the routes include today's schedule", async () => {
-    const scheduleId = apiData?.dates?.[today]?.schedule_id?.toString();
+  test("each route includes a schedule for today", async () => {
+    const todaysSchedule = apiData?.dates?.[today]?.schedule_id?.toString();
     for (const routeId of constants.numericBusRouteIds) {
       const routeSchedules = apiData?.routes?.[routeId]?.schedules;
-      expect
-        .soft(
-          routeSchedules?.[scheduleId]?.directions,
-          `Route ${routeId} should have directions for schedule ${scheduleId}`
-        )
-        .toBeDefined();
+      const directions = routeSchedules?.[todaysSchedule]?.directions;
+      expect.soft(directions, `Route ${routeId} should have directions for schedule ${todaysSchedule}`).toBeDefined();
       logNote(`Route ${routeId} schedule ids: ${Object.keys(routeSchedules ?? {}).join(', ')}`);
     }
   });
