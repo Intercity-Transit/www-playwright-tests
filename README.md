@@ -52,6 +52,9 @@ npx playwright test src/tests/homepage-bus-routes --reporter=list
 # Run tests with a specific tag
 npx playwright test --grep @routes
 
+# Or skip some tags
+npx playwright test --grep-invert "@api"
+
 # Run and save a report
 npm run test:run-and-save
 ```

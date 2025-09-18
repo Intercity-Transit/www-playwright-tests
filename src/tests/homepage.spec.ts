@@ -41,22 +41,21 @@ test.describe(`Tests for the homepage`, () => {
     const routes = await page.$$eval('#route-form-container select#edit-routes option', (options) =>
       options.map((option) => option.textContent)
     );
-    const routesCount = routes.length;
+    logNote(`Routes listed:\n${routes.join('\n')}`);
 
-    await expect.soft(routesCount, 'Bus routes list should show at least 18 items').toBeGreaterThanOrEqual(18);
-    logNote(`Number of routes found: ${routesCount}`);
+    await expect.soft(routes.length, 'Bus routes list should show at least 18 items').toBeGreaterThanOrEqual(18);
+    logNote(`Number of routes found: ${routes.length}`);
 
-    // Log the routes shown
-    const routeList = routes
-      .filter(Boolean)
-      .map((r) => r?.trim())
-      .join('\n');
-    logNote(`Routes listed:\n${routeList}`);
-
-    // Test "Select a Stop" has items
+    // Test stops count
     await page.locator('#block-routeandtripformsblock ul.nav >> text=Stops').click();
     const stops = await page.$$eval('select#edit-stop option', (opts) => opts.map((o) => o.textContent));
     await expect.soft(stops.length, '"Select a Stop" should show at least 100 items').toBeGreaterThanOrEqual(100);
     logNote(`Number of stops found: ${stops.length}`);
+  });
+
+  test('can click on bus route in list', async ({ page }) => {
+    await page.getByLabel('Route', { exact: true }).selectOption('60');
+    await page.getByRole('button', { name: 'View Route' }).click();
+    await common.watchForPageErrors(page);
   });
 });

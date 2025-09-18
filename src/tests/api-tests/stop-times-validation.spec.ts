@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import Ajv from 'ajv';
 import { test, expect } from '@playwright/test';
 import { logNote } from '../../utils/logNote';
@@ -37,42 +38,48 @@ const schema = {
   },
 };
 
-const routeIds = constants.numericBusRouteIds.slice(0, 3);
 const getDate = (daysOffset: number = 0): Date => new Date(Date.now() + daysOffset * 24 * 60 * 60 * 1000);
-const today = getDate().toISOString().split('T')[0];
 
-test.describe.serial('Stop Times API Validation @api-test', () => {
-  const apiDataMap: Record<string, any> = {};
+function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
-  test.beforeAll(async ({ request }) => {
-    for (const routeId of routeIds) {
-      if (!apiDataMap[routeId]) {
-        apiDataMap[routeId] = await fetchApiWithRetry(
-          request,
-          `https://pics.intercitytransit.com/api/stop_times?route_id=${routeId}`
-        );
-      }
-    }
-  });
+for (const routeId of constants.numericBusRouteIds) {
+  test.describe(`API validation ${routeId} stop times @api-test`, () => {
+    let apiData: any;
 
-  for (const routeId of routeIds) {
-    test(`Route ${routeId}: API response matches schema`, async () => {
-      const apiData = apiDataMap[routeId];
+    test.beforeAll(async ({ request }) => {
+      apiData = await fetchApiWithRetry(
+        request,
+        `https://pics.intercitytransit.com/api/stop_times?route_id=${routeId}`
+      );
+      // Pause 1 second before moving on
+      await sleep(1000);
+    });
+
+    test(`response matches basic schema`, async () => {
       const validate = ajv.compile(schema);
       const valid = validate(apiData);
-      expect.soft(valid).toBeTruthy();
+      expect.soft(valid, 'API response should match the basic AJV schema').toBeTruthy();
       if (!valid) logNote(`Validation errors for route ${routeId}: ${JSON.stringify(validate.errors)}`);
     });
 
-    test(`Route ${routeId} stop times tables includes today`, async () => {
-      const apiData = apiDataMap[routeId];
-      const trips = apiData?.data?.Route?.StopTimesTables?.[0]?.[0]?.trips;
-      expect.soft(trips, 'the route has trips defined').toBeDefined();
+    test(`response has correct route_id`, async () => {
+      expect
+        .soft(String(apiData?.data?.Route?.RouteInfo?.route_id), 'the route info should have correct route_id')
+        .toEqual(routeId);
+      logNote(`Route ${routeId} info: ${JSON.stringify(apiData?.data?.Route?.RouteInfo)}`);
+    });
 
-      // Handle trips as object (not array)
-      const randomTrip = trips && typeof trips === 'object' ? trips[Object.keys(trips)[0]] : null;
+    test(`stop times includes today`, async () => {
+      // Check data.Route.StopTimesTables[0][0].trips["t33E-b4B2-slA"].arrival_time
+      const stopTimeTables = _.get(apiData, 'data.Route.StopTimesTables', []);
+      const randomTable = _.sample(_.flatten(stopTimeTables));
+      const randomTrip = _.sample(_.values(randomTable?.trips));
+      const today = getDate().toISOString().split('T')[0];
+
       expect.soft(randomTrip?.arrival_time?.startsWith(today), 'the route has trips for today').toBeTruthy();
       logNote(`Route ${routeId} random trip tested ${JSON.stringify(randomTrip)}`);
     });
-  }
-});
+  });
+}
